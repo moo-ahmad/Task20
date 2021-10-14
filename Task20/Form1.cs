@@ -67,30 +67,6 @@ namespace Task20
                 }
             }
 
-
-
-            //using (SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["Default"].ConnectionString))
-            //{
-            //    if (cn.State == ConnectionState.Closed)
-            //    {
-            //        cn.Open();
-            //    }
-            //    using(DataTable dt = new DataTable("Basaeball"))
-            //    {
-            //        using(SqlCommand cmd = new SqlCommand("select * from Players where secondName=@lastName"))
-            //        {
-            //            cmd.Parameters.AddWithValue("lastName", playerText.Text);
-
-            //            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-
-            //            adapter.Fill(dt);
-
-            //            dataGridViewResult.DataSource = dt;
-            //        }
-            //    }
-            //}
-
-
         }
     }
 }
