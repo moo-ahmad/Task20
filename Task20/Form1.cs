@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SQLite;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Task20
 {
@@ -18,28 +19,77 @@ namespace Task20
             InitializeComponent();
         }
 
-        private void data_show()
+        private void Form1_Load(object sender, EventArgs e)
         {
-            var con = new SQLiteConnection();
+            dataGridViewTable.DataSource = GetPlayersList();
+        }
+        private DataTable GetPlayersList()
+        {
+            DataTable dtPlayers = new DataTable();
+
+            string conString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
+
+            using(SqlConnection con = new SqlConnection(conString))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Players", con))
+                {
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    dtPlayers.Load(reader);
+                }
+            }
+
+            return dtPlayers;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void searchButton_Click(object sender, EventArgs e)
         {
 
-        }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
 
-        }
+            
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
+            string conString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
 
-        }
+            SqlConnection con = new SqlConnection(conString);
+            DataTable dt = new DataTable();
+            using (con)
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Players WHERE secondName=@lastName", con))
+                {
+                    cmd.Parameters.AddWithValue("lastName", playerText.Text);
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+                    adapter.Fill(dt);
+
+                    dataGridViewResult.DataSource = dt;
+                }
+            }
+
+
+
+            //using (SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["Default"].ConnectionString))
+            //{
+            //    if (cn.State == ConnectionState.Closed)
+            //    {
+            //        cn.Open();
+            //    }
+            //    using(DataTable dt = new DataTable("Basaeball"))
+            //    {
+            //        using(SqlCommand cmd = new SqlCommand("select * from Players where secondName=@lastName"))
+            //        {
+            //            cmd.Parameters.AddWithValue("lastName", playerText.Text);
+
+            //            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+            //            adapter.Fill(dt);
+
+            //            dataGridViewResult.DataSource = dt;
+            //        }
+            //    }
+            //}
+
 
         }
     }
